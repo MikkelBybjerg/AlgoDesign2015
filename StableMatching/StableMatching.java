@@ -8,7 +8,7 @@ public class StableMatching
 	public static void main(String[] args)
 	{
 		//String filename = args[0];
-		String filename = "sm-data/sm-illiad-in.txt";
+		//String filename = "sm-data/sm-illiad-in.txt";
 		
 		/*
 		try
@@ -26,7 +26,7 @@ public class StableMatching
 		}
 		*/
 		
-		testStableMatching();
+		testMatchingForAllFiles();
 	}
 	
 	//  matching algorithm
@@ -116,7 +116,7 @@ public class StableMatching
 	
 	//  testing
 	
-	public static void testStableMatching()
+	public static void testMatchingForAllFiles()
 	{
 		File dataDir = new File("sm-data");
 		for(File file : dataDir.listFiles())
