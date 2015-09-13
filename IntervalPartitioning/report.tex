@@ -1,15 +1,13 @@
-\documentclass{tufte-handout}
+\documentclass{article}
 \usepackage{amsmath}
 \usepackage[utf8]{inputenc}
-\usepackage{mathpazo}
-\usepackage{booktabs}
-\usepackage{microtype}
+
 
 \pagestyle{empty}
 
 
 \title{Interval Partitioning Report}
-\author{Alice Cooper and Bob Marley}
+\author{Alina Dumitrache, George Iuriet and Mikkel Christophersen}
 
 \begin{document}
   \maketitle
@@ -18,19 +16,21 @@
 
   Our implementation produces the expected results on all
   input--output file pairs.
-  \sidenote{%
-  Complete the report by filling in your correct names,
-  filling in the parts marked $[\ldots]$,
-  and changing other parts wherever necessary.
-  For instance, if your implementation passes all tests, then write that.
-  Remove the sidenotes in your final hand-in.
-  }
 
   \section{Implementation details}
+  We are using a bi-dimensional array (req[4][n]) to store the intervals, as follows:\\
+  - req[0][i] stores the starting times \\
+  - req[1][i] stores the finishing times \\
+  - req[2][i] stores the initial order of the intervals \\
+  - req[3][i] stores the partition the interval belongs to (initialized with -1) 
 
-  We use the library call \verb+java.util.Collections.shuffle+ on the
-  \verb+java.util.ArrayList+ of FancyObjects to avoid worst case behavior. We
-  then examine all pairs, and in case of a conflict, flip a coin for who gets
-  the room with the smallest index. After that step, our algorithm runs in
-  constant time by guessing the correct output.
+  After reading the input, we are performing a quicksort (O(n log n) time) on the bi-dimensional array, sorting it based on the starting times (req[0][i]). In order to avoid the worst case scenario, the pivot element is always the middle index number.
+
+  We then use an integer to sort the current number of partitions (d, initialized as -1), and an integer array for storing the current finishing time for each partition. Each element in the bi-dimensional array is treated as follows: \\
+  - if the current number of partitions is 0, then the first element is automatically assigned a partition, while the latest finishing time for the partition becomes the finishing time of the first element \\
+  - in all other cases, we are checking the array storing the finishing time for each partition to see if there is any finishing time earlier than the starting time of our present element. If we find one, we assign that partition to our current element. Otherwise, we increment the number of partitions and assign the current's element finishing time to it.
+
+  As the intervals need to be displayed in the initial order, we are performing again the quicksort, based on the initial order column this time (req[2][i]), and then display the bi-dimensional array.
+
+  The running time of our algorithm is O(n log n).
 \end{document}
