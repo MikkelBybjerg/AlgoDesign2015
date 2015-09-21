@@ -1,40 +1,39 @@
-\documentclass{tufte-handout}
+\documentclass{article}
 \usepackage{amsmath}
 \usepackage[utf8]{inputenc}
-\usepackage{mathpazo}
-\usepackage{booktabs}
-\usepackage{microtype}
 
 \pagestyle{empty}
 
 
 \title{Closest Pair Report}
-\author{Alice Cooper and Bob Marley}
+\author{Alina-Florentina Dumitrache, \\George Valentin Iuriet \\and Mikkel Bybjerg Christophersen}
 
 \begin{document}
   \maketitle
 
   \section{Results}
 
-  Our implementation produces the expected results on all input--output file pairs, except {\tt slotermeier-23-tsp.txt}, where our code reports distance 2.531 as the shortest distance.
-  This may be because of rounding errors, or differences between {\tt float} and {\tt double} on various machines.
-  \sidenote{%
-  Complete the report by filling in your correct names,
-  filling in the parts marked $[\ldots]$,
-  and changing other parts wherever necessary.
-  For instance, if your implementation passes all tests, then write that.
-  Remove the sidenotes in your final hand-in.
-  }
+  Our implementation produces the expected results on all input-output file pairs tested.\\
+  We measure equality of solutions by whether the floating-point difference between the wanted and acquired solutions is less than $\frac{1}{10^6}$, which we consider precise enough for this assignment. \\
 
   The following table shows the closest pairs in the input files {\tt wc-instance-*.txt}.
   Here $n$ denotes the number of points in the input,
   and $(u,v)$ denotes a closest pair of points at distance $\delta$.
 
   \bigskip\noindent
-  \begin{tabular}{rrrr}\toprule
-    $n$ & $u$ & $v$ & $\delta$ \\\midrule
+  \begin{tabular}{rrrr}
+    $n$ & $u$ & $v$ & $\delta$ \\
     2 & 0 & 1 & 1 \\
-    $[\ldots]$ \\\bottomrule
+    6 & 0 & 4 & 1 \\
+    14 & 9 & 11 & 1 \\
+    30 & 9 & 11 & 1 \\
+    62 & 11 & 24 & 1 \\
+    126 & 91 & 122 & 1 \\
+    254 & 29 & 16 & 1 \\
+    1022 & 337 & 1005 & 1 \\
+    4094 & 3953 & 2802 & 1 \\
+    16382 & 11670 & 1043 & 1 \\
+    65534 & 35326 & 14974 & 1 \\
   \end{tabular}
 
 
@@ -42,18 +41,28 @@
 
   We resort by $y$-coordinates in each recursive step.
 
-  For the comparison of points close to $s$ in $S_y$ we inspect 15 points,
-  as explained (5.10) of Kleinberg and Tardos, \emph{Algorithm Design}, Addison--Wesley 2008.
+  For the comparison of points close to $s$ in $S_y$ we inspect 11 points,
+  as explained by Troels Bjerre Sørensen in lecture, and accompanying slides by Kevin Wayne.\\	
   Here is the corresponding part of our code:
   \begin{verbatim}
-    min = [...]
-    for (s [...]
-      for [...]
-        if (s.distance(...) < min) [...]
+    minIndex = index of minimum solution for the recursive calls
+    minDist = value of minimum solution for the recursive calls
+    band = list of points less than distance delta from splitting line
+    
+    for (int i=0;i<band.length;i++)
+        for(int j=1;j<11;j++)
+        {
+            if(i+j >= band.length)
+                continue;
+            double dist = euclid(band[i], band[i+j]);
+            if(dist < minDist)
+            {
+                minIndex = new int[]{i, i+j}; //simplified
+                minDist = dist;
+            }
+        }
   \end{verbatim}
 
-  Our running time is $O(n\log n)$ for $n$ points.
-  \sidenote{Change or delete as necessary, add anything else you find interesting about your implemenation.}
 
 
 \end{document}
