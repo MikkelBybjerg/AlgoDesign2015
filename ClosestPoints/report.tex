@@ -62,7 +62,8 @@
             }
         }
   \end{verbatim}
-
+	
+  Our solution runs in time $O(n \log^2 n)$, as $\log n$ recursive levels take place, and at each level all subarrays are sorted with respect to the y-coordinate anew, equivalent to the entire array being sorted at each level in time $O(n \log n)$. Using the merge-sort strategy of each recursion returning its y-sorted subarray, sorting could have been done in linear time, and running time could have been made $O(n\log n)$.
 
 
 \end{document}
