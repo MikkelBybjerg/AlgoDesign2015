@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
@@ -65,7 +64,7 @@ public class Flow
 			this.overAllFlow = overAllFlow;
 			this.flow = flow;
 			this.cut = cut;
-		}
+		} 	
 	}
 	
 	static class PathFound
@@ -108,17 +107,21 @@ public class Flow
 			Augment(resi, path.path);
 		}
 		
-		List<Edge> cut = new ArrayList<Edge>();
+		List<Edge> flowGraph = new ArrayList<Edge>();
 		for(Edge e : resi.getEdges())
-			if(path.searched.contains(e.from) && !path.searched.contains(e.to))
-				cut.add(new Edge(e.from, e.to, (e.capacity - ResiEdge(resi, e).capacity) / 2));
+			if(e.capacity >= ResiEdge(resi, e).capacity)
+				flowGraph.add(new Edge(e.from, e.to, (e.capacity - ResiEdge(resi, e).capacity) / 2));
 		
+		List<Edge> cut = new ArrayList<Edge>();
+		for(Edge e : flowGraph)
+			if(path.searched.contains(e.from) && !path.searched.contains(e.to))
+				cut.add(e);
 		
 		int flow = 0;
 		for(Edge e : cut)
 			flow += e.capacity;
 		
-		return new FlowAndCut(flow, g, cut);
+		return new FlowAndCut(flow, new Graph(g.vertexCount, flowGraph), cut);
 	}
 	
 	public static Graph ParseGraphFile(String filename) throws FileNotFoundException

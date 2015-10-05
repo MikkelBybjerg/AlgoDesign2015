@@ -1,78 +1,52 @@
-\documentclass{tufte-handout}
+\documentclass{article}
 \usepackage{amsmath}
 \usepackage[utf8]{inputenc}
-\usepackage{mathpazo}
-\usepackage{booktabs}
-\usepackage{microtype}
 
 \pagestyle{empty}
 
 
 \title{Flow Report}
-\author{Anatoli Cooper and Boris Marley}
+\author{Alina-Florentina Dumitrache, \\George Valentin Iuriet \\and Mikkel Bybjerg Christophersen}
 
 \begin{document}
   \maketitle
 
   \section{Results}
 
-  Our implementation successfully computes a flow of 163 on the input file, confirming the analysis of the American enemy.
-  \sidenote{%
-  Complete the report by filling in your correct names,
-  filling in the parts marked $[\ldots]$,
-  and changing other parts wherever necessary.
-  Remove the sidenotes in your final hand-in.
-  Insert `comrades!' and `for the motherland' wherever you see fit.
-  }
+  Our implementation successfully computes a flow of 163 on the input file, confirming the analysis of the American enemy.\\
 
   We have analysed the possibilities of descreasing the capacities near Minsk.
-  Our analysis is summaries in the following table:\sidenote{%
-    Complete and correct the table.
-  }
+  Our analysis is summaries in the following table:\\
 
 \bigskip
-  \begin{tabular}{rccc}\toprule
-    Case & 4W--48 & 4W--49 & Effect on flow \\\midrule
-    1& 30& 20 & no change \\
-    2& 20 &30 & no change \\
-    3&20 & 20& $-10$ \\
-    $[\ldots]$ \\\bottomrule
+  \begin{tabular}{rccc}
+    Case & 4W--48 & 4W--49 & Effect on flow \\
+    1& 30 & 20 & no change \\
+    2& 20 & 30 & no change \\
+    3& 20 & 20 & no change \\
   \end{tabular}
   \bigskip
 
-  In case 4, the new bottleneck becomes
+  In case 3, the new bottleneck becomes
   \begin{quote}
-      1--44, 3--2, $[\ldots]$
+      52--51, 51--7, 7--50, 5--49, 46--47, 4W--49, 4W--48, b--R, b--H
   \end{quote}
-  The comrade from Minsk is advised to $[\ldots]$.
+  The comrade from Minsk is advised to explain why an American agent would be needed to secure plans we were supposed to own in the first place. Regardless, reducing lines 4W--48 and 4W--49 by 10 units each wont harm the maximal flow for the motherland. It will however include them in the minimal cut, and therefore no greater improvement can be made for the motherland.\\
 
   \section{Implementation details}
 
-  We use a straighforward implemenation of Bellman--Quine's flow algorithm as described in Bronstein, \emph{Foundations of Algorithms}, chap.~6.
-  We use Prim's algorithm to find an augmenting path and also implement the neat trick of flow by recomputing the inverse of the antisnail every 2nd iteration.\sidenote{%
-    Replace by a description of what you actually do.
-  }
+  We use the Ford-Fulkerson algorithm scheme to compute minimal flow. We use breadth-first search to find the shortest augmenting path, which ensures that $O(ve)$ augmentations take place for a graph of $v$ vertices and $e$ edges. Each run of the search takes time $O(e)$, but each augmentation takes time $O(ve)$, since we locate the residual counterpart of each edge by simple search in time $O(e)$. Clearly this could be reduced to constant time with a smarter data structure, leading to the wanted time of $O(ve^2)$, but our implementation runs in time $O(v^2e^2)$.
 
-  The running time is $[\ldots]$.
-
-  We have implemented each undirected edge in the input graph as a $[\ldots]$.
-  In the corresponding residual graph, the edge is represented by a $[\ldots]$.
+  We have implemented each undirected edge in the input graph as a directed edge with arbitrary direction.
+  In the corresponding residual graph, the edge is represented by two opposite facing directed edges, each with the weight of the undirected edge. The flow can therefore span twice the capacity; from full flow forwards to full flow back. The resulting flow is interpreted as half the difference between the two residual edges.\\
   Our datatype for edge is this:
-  \sidenote{%
-    What I wrote here is complete nonsense, of course.
-    Replace by a description of your actual implementation---what \emph{did} you use?
-    A pair of directed edges?
-    A single undirected edges with a bit to see in which direction the flow goes?
-    As indicated, it makes sense to actually include your datatype for edge in the report.
-    Here, and in general, it makes sense to have written short and sweet code.
-  }
+  
   \begin{verbatim}
-    class FlowEdge
-    {
-      Vertex from, to;
-      GUISwingComponentFactory bar;
-      Edge next, parent, foo;
-    }
+    static class Edge
+   	{
+   	    public int from, to;
+   	    public int capacity;
+   	}
   \end{verbatim}
 
 
